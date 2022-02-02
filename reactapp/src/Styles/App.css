@@ -1,16 +1,19 @@
 .App {
-  text-align: center;
+  display: flex;
+  justify-content: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.App-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 30px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.App-content {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .App-header {
@@ -36,3 +39,4 @@
     transform: rotate(360deg);
   }
 }
+

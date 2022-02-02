@@ -1,0 +1,17 @@
+.intxt {
+    border: 2px solid seagreen;
+    
+}
+
+.intxt:focus {
+    background-color: rgb(231, 231, 231);
+}
+.inbtn {
+    border: 2px solid seagreen;
+    border-radius: 0px 10px 10px 0px;
+}
+
+.inbtn:hover {
+    color: rgb(128, 25, 25);
+    background-color: lightgreen;
+}
