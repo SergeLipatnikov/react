@@ -1,49 +1,64 @@
-import './Styles/App.css';
-import { Message } from './Components/Message';
-import { Form } from './Components/Form';
-import { useEffect, useState } from "react/cjs/react.development";
-import { AUTHORS } from './utils/constants';
+import React, { useState, useEffect, useRef } from "react";
+import "./Styles/App.css";
+import { Message } from "./Components/Message";
+import { AUTHORS } from "./utils/constants";
+import { MessageList } from "./Components/MessageList";
+import { FormMui } from "./Components/FormMui";
 
 
-
+const chats = [
+  { name: "Chat1", id: "1" },
+  { name: "Chat2", id: "2" },
+];
 
 function App() {
 
-  const [messageList, setMessageList] = useState ([]);
+  const [messageList, setMessageList] = useState([]);
+  const messagesEnd = useRef();
 
   const handleAddMessage = (text) => {
+    sendMessage(text, AUTHORS.ME);
+  };
+
+  const sendMessage = (text, author) => {
     const newMsg = {
       text,
-      author: AUTHORS.hum,
+      author,
+      id: `msg-${Date.now()}`,
     };
     setMessageList((prevMessageList) => [...prevMessageList, newMsg]);
   };
 
   useEffect(() => {
+    messagesEnd.current?.scrollIntoView();
+
     let timeout;
-    if (messageList[messageList.length - 1]?.author === AUTHORS.hum) {
+    if (messageList[messageList.length - 1]?.author === AUTHORS.ME) {
       timeout = setTimeout(() => {
-        const newMsg = {
-          text: "Hello, human",
-          author: AUTHORS.bot,
-        };
-        setMessageList((prevMessageList) => [...prevMessageList, newMsg]);
-      }, 1500);
+        sendMessage("still here", AUTHORS.BOT);
+      }, 1000);
     }
 
-    return () => {
-      clearTimeout(timeout);
-    };
+    return () => clearTimeout(timeout);
   }, [messageList]);
 
+  useEffect(() => {
+    console.log(messagesEnd);
+  }, []);
+
+
   return (
-    <div className="App-form" >
-      <div className="App-content">
-        {messageList.map((message) => (
-          <Message text={message.text} author={message.author} />
+    <div className="">
+      <ul>
+        {chats.map((chat) => (
+          <li key={chat.id}>{chat.name}</li>
         ))}
+      </ul>
+      <div className="App-content">
+        <MessageList messages={messageList} />
+        <div ref={messagesEnd} />
       </div>
-      <Form onSubmit={handleAddMessage} />
+      <FormMui onSubmit={handleAddMessage} />
     </div>
   );
 }
