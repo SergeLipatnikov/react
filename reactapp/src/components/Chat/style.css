@@ -1,0 +1,4 @@
+.App-content {
+    max-height: 100px;
+    overflow: auto;
+}
