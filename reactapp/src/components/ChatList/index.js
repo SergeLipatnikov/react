@@ -1,5 +1,6 @@
 import { List, ListItem } from "@mui/material";
 import { Link, Outlet } from "react-router-dom";
+import { StackedLineChartSharp } from "@mui/icons-material";
 
 const chats = [
   {

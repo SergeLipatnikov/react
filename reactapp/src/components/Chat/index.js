@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { AUTHORS } from "../../utils/constants";
 import { MessageList } from "../MessageList";
-import { FormMui } from "../FormMui";
 import { ChatList } from "../ChatList";
 import { Navigate, useNavigate, useParams } from "react-router";
+import { FormMui, FormWithLogger } from "../FormMui";
 
 import "../../App.css";
 import "../Chat/style.css";
@@ -13,7 +13,7 @@ const messages = {
   chat1: [],
 };
 
-export function Chat() {
+export function Chat({ messageColor }) {
   const params = useParams();
   const navigate = useNavigate();
   const { chatId } = params;
@@ -56,8 +56,6 @@ export function Chat() {
     return () => clearTimeout(timeout);
   }, [messageList]);
 
-  useEffect(() => {console.log(messagesEnd); }, []);
-
   if (!messageList[chatId]) {
     return <Navigate to="/chats" replace />;
   }
@@ -68,7 +66,7 @@ export function Chat() {
       <div className="App-content">
           <MessageList messages={messageList[chatId] }/>
         </div>
-        <FormMui onSubmit={handleAddMessage} />
+        <FormWithLogger messageColor="yellow" onSubmit={handleAddMessage} />
       </div>
     </div>
   );
