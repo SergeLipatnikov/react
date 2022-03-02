@@ -1,11 +1,6 @@
-export const CHANGE_SHOW_NAME = "PROFILE::CHANGE_SHOW_NAME";
-export const CHANGE_NAME = "PROFILE::CHANGE_NAME";
+import { PROFILE_SET_NAME } from "./actionTypes";
 
-export const changeShowName = {
-  type: CHANGE_SHOW_NAME,
-};
-
-export const changeName = (newName) => ({
-  type: CHANGE_NAME,
-  name: newName,
+export const changeName = (payload) => ({
+  type: PROFILE_SET_NAME,
+  payload
 });

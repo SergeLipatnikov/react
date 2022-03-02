@@ -1,6 +1,6 @@
-import { createContext } from "react";
+import React from "react";
 
-export const ThemeContext = createContext({
-  setMessageColor: () => {},
-  messageColor: "green",
+export const ThemeContext = React.createContext({
+  theme: "red",
+  changeTheme: () => {},
 });

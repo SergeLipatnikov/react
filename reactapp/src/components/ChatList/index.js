@@ -1,17 +1,30 @@
-import { List, ListItem } from "@mui/material";
-import { Link, Outlet } from "react-router-dom";
-import { FormMui } from "../FormMui";
+import React, { useContext } from "react";
+import { List, ListItem } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import { ThemeContext } from "../../utils/ThemeContext";
+import { withThemeContext } from "../Message";
+import { AddChat } from "./AddChat";
 import { ChatItem } from "./ChatItem";
 
-
-export const ChatList = ({ chats, onAddChat, onDeleteChat }) => (
+const Chats = ({ chats, theme, onDeleteChat }) => {
+  return (
     <>
-    <List>
-      {chats.map((chat) => (
-        <ChatItem chat={chat} onDeleteChat={onDeleteChat} />
-      ))}
-    </List>
-    <FormMui onSubmit={onAddChat} />
-    <Outlet />
-  </>
-);
+      <button onClick={theme.changeTheme}>CHANGE COLOR</button>
+      <List>
+        {Object.values(chats).map((c) => (
+          <ChatItem
+            name={c.name}
+            key={c.id}
+            id={c.id}
+            onDelete={onDeleteChat}
+          />
+        ))}
+        <ListItem>
+          <AddChat />
+        </ListItem>
+      </List>
+    </>
+  );
+};
+
+export const ChatList = withThemeContext(Chats);

@@ -1,2 +1,3 @@
-export const selectName = (state) => state.profile.name;
-export const selectShowName = (state) => state.profile.showName;
+import { AUTHORS } from "../../utils/constants";
+
+export const selectName = (state) => state.profile.name || AUTHORS.human;

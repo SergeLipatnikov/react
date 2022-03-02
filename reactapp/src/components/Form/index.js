@@ -1,30 +1,31 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useState, useRef, useEffect } from 'react';
+import { AUTHORS } from '../../utils/constants';
+import { useInput } from '../../utils/useInput';
+import "../Form/Form.css"
 
-export const Form = ({ onSubmit }) => {
-  const [value, setValue] = useState("");
-  const textField = useRef();
+export const Form = ({ onSendMessage }) => {
+  const inputRef = useRef();
 
-  const handleChange = (e) => {
-    setValue(e.target.value);
-  };
+  const { value, handleChange, reset } = useInput('');
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(value);
-    setValue("");
-  };
+
+    onSendMessage({
+      id: Date.now(),
+      text: value,
+    });
+    reset();
+  }
 
   useEffect(() => {
-    textField.current?.focus();
+    inputRef.current?.focus();
   }, []);
 
   return (
-    <form onSubmit={handleSubmit}><input
-    value={value}
-    ref={textField}
-    onChange={handleChange}
-    type="text"
-  />
-  <input type="submit" />
-</form>
-);
-};
+    <form onSubmit={handleSubmit}>
+      <input className="input" ref={inputRef} type="text" value={value} onChange={handleChange} />
+      <input className="button" type="submit" />
+    </form>
+  )
+}

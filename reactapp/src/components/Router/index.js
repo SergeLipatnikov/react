@@ -1,128 +1,46 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter, Routes, Route, Link, NavLink } from "react-router-dom";
-import App from "../../App";
-import { addChat, deleteChat } from "../../store/chats/actions";
+import React, { useState } from "react";
+import { BrowserRouter, Link, Route, Routes, NavLink } from "react-router-dom";
+import Profile from "../Profile";
+import Home from "../Home";
 import { ThemeContext } from "../../utils/ThemeContext";
-import { Chat } from "../Chat";
-import { ChatList } from "../ChatList";
-import ConnectedProfile, { Profile } from "../Profile";
-
-const Home = () => <h2>Home page</h2>;
-
-const inititalChats = [
-  {
-    name: "Chat 1",
-    id: "chat1",
-  },
-  {
-    name: "Chat 2",
-    id: "chat2",
-  },
-  {
-    name: "Chat 3",
-    id: "chat3",
-  },
-];
-
-const initialMessages = inititalChats.reduce((acc, el) => {
-  acc[el.id] = [];
-  return acc;
-}, {});
+import '../Router/Router.css';
 
 export const Router = () => {
-  const [messageColor, setMessageColor] = useState("red");
-
-  const [messages, setMessages] = useState(initialMessages);
-
-  const chatList = useSelector((state) => {
-    console.log(state);
-    return state.chats
-  });
-  const dispatch = useDispatch();
-
-  const handleAddMessage = (chatId, newMsg) => {
-    setMessages((prevMessageList) => ({
-      ...prevMessageList,
-      [chatId]: [...prevMessageList[chatId], newMsg],
-    }));
-  };
-
-  const handleAddChat = (newChatName) => {
-    const newId = `chat-${Date.now()}`;
-
-    dispatch(addChat(newId, newChatName));
-    setMessages((prevMessages) => ({
-      ...prevMessages,
-      [newId]: [],
-    }));
-  };
-
-  const handleDeleteChat = (idToDelete) => {
-    dispatch(deleteChat(idToDelete));
-
-    setMessages((prevMessages) => {
-      const newMsgs = { ...prevMessages };
-
-      delete newMsgs[idToDelete];
-      return newMsgs;
-    });
-  };
-
-  const contextValue = {
-    messageColor,
-    setMessageColor,
+  const [bgColor, setBgColor] = useState("white");
+  const changeColor = () => {
+    setBgColor((prevColor) => (prevColor === "white" ? "gray" : "white"));
   };
 
   return (
-    <ThemeContext.Provider value={contextValue}>
+    <ThemeContext.Provider value={{ theme: bgColor, changeTheme: changeColor }}>
       <BrowserRouter>
-        <div>
-          <NavLink
-            to="/"
-            style={({ isActive }) => ({ color: isActive ? "green" : "grey" })}
-          >
-            home
-          </NavLink>
-        </div>
-        <div>
-          <NavLink
-            style={({ isActive }) => ({ color: isActive ? "green" : "grey" })}
-            to="/chats"
-          >
-            chats
-          </NavLink>
-        </div>
-        <div>
-          <NavLink
-            style={({ isActive }) => ({ color: isActive ? "green" : "grey" })}
-            to="/profile"
-          >
-            profile
-          </NavLink>
-        </div>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<ConnectedProfile />} />
+        <ul>
+          <li style={{ backgroundColor: bgColor }}>
+            <Link className="header" to="/home">HOME</Link>
+          </li>
+          <li style={{ backgroundColor: bgColor }}>
+            <Link className="header" to="/profile">PROFILE</Link>
+          </li>
+        </ul>
           <Route
-            path="chats"
-            element={
-              <ChatList
-                onDeleteChat={handleDeleteChat}
-                onAddChat={handleAddChat}
-                chats={chatList}
-              />
-            }
-          >
-            <Route
-              path=":chatId"
-              element={
-                <Chat messages={messages} addMessage={handleAddMessage} />
-              }
-            />
+            path="/profile"
+            render={(data) => (
+              <Profile match={data.match} history={data.history} />
+            )}
+          ></Route>
+          <Route path="/home/:chatId?">
+            <Home />
           </Route>
-          <Route path="*" element={<h2>404</h2>} />
-        </Routes>
+          <Route path="/nochat">
+            <div> No such chat</div>
+            <Link to="/home">HOME</Link>
+          </Route>
+          <Route path="/" exact>
+            <h2>WELCOME</h2>
+          </Route>
+          <Route path="*">
+            <h2>404</h2>
+          </Route>
       </BrowserRouter>
     </ThemeContext.Provider>
   );
